@@ -2,13 +2,18 @@
 <html>
   <head> </head>
   <body>
-    <div style="display: flex" id="grid-container">
-      <div id="leftrow"></div>
-      <div id="midrow"></div>
-      <div id="rightrow"></div>
+    <div style="display: flex;">
+      <div style="display: flex" id="grid-container">
+        <div id="leftrow"></div>
+        <div id="midrow"></div>
+        <div id="rightrow"></div>
+      </div>
+      <button id="tombol-roll">klik</button>
     </div>
-    <button id="tombol-roll">klik</button>
     <script>
+      /**
+       * INITIALIZATION
+       */
       const left = document.getElementById("leftrow");
       const mid = document.getElementById("midrow");
       const right = document.getElementById("rightrow");
@@ -36,15 +41,25 @@
           newElement.style.width = "150px";
           newElement.style.position = "absolute";
           newElement.style.transform = `translate(0px, ${i * SQUARE_LENGTH}px)`;
+          newElement.style.transition = 'all 0.4s linear'
           newElement.src = img;
           v.appendChild(newElement);
         }
       });
 
-      const tombolRoll = document.getElementById("tombol-roll")
-      tombolRoll.addEventListener('click', e => {
-        console.log("clickme")
-      })
+      /**
+       * TOMBOL
+       */
+      const tombolRoll = document.getElementById("tombol-roll");
+      tombolRoll.addEventListener("click", (e) => {
+        cols.forEach((v) => {
+          const childs = [...v.children];
+          childs.forEach(child => {
+            const translate = child.style.transform.replace('translate(0px, ', "").replace("px)", "")
+            child.style.transform = `translate(0px, ${(+translate + 170) % (170 * 3)}px)`
+          })
+        });
+      });
     </script>
   </body>
 </html>
