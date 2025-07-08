@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head> </head>
+  <body>
+    <div style="display: flex" id="grid-container">
+      <div id="leftrow"></div>
+      <div id="midrow"></div>
+      <div id="rightrow"></div>
+    </div>
+    <button id="tombol-roll">klik</button>
+    <script>
+      const left = document.getElementById("leftrow");
+      const mid = document.getElementById("midrow");
+      const right = document.getElementById("rightrow");
+
+      const cols = [left, mid, right];
+      const gridContainer = document.getElementById("grid-container");
+
+      const SQUARE_LENGTH = 170;
+
+      gridContainer.style.width = `${SQUARE_LENGTH * 3}px`;
+      gridContainer.style.height = `${SQUARE_LENGTH * 3}px`;
+      cols.forEach((v) => {
+        v.style.display = "flex";
+        v.style.flexDirection = "column";
+        v.style.position = "relative";
+        v.style.width = `${SQUARE_LENGTH}px`;
+
+        for (let i = 0; i < 3; i++) {
+          const outcome = Math.floor(Math.random() * 3);
+          let img;
+          if (outcome === 0) img = "./segitiga.png";
+          if (outcome === 1) img = "./kotak.png";
+          if (outcome === 2) img = "./bunder.png";
+          const newElement = document.createElement("img");
+          newElement.style.width = "150px";
+          newElement.style.position = "absolute";
+          newElement.style.transform = `translate(0px, ${i * SQUARE_LENGTH}px)`;
+          newElement.src = img;
+          v.appendChild(newElement);
+        }
+      });
+
+      const tombolRoll = document.getElementById("tombol-roll")
+      tombolRoll.addEventListener('click', e => {
+        console.log("clickme")
+      })
+    </script>
+  </body>
+</html>
