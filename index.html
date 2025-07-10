@@ -2,8 +2,15 @@
 <html>
   <head> </head>
   <body>
-    <div>
-      <div style="display: flex">
+    <div
+      style="
+        min-width: 100vh;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+      "
+    >
+      <div style="display: flex; background-color: pink; overflow: hidden">
         <div style="display: flex" id="grid-container">
           <div id="leftrow"></div>
           <div id="midrow"></div>
@@ -15,17 +22,17 @@
     <script>
       function createNewElement(transformX) {
         const outcome = Math.floor(Math.random() * 3);
-          let img;
-          if (outcome === 0) img = "./segitiga.png";
-          if (outcome === 1) img = "./kotak.png";
-          if (outcome === 2) img = "./bunder.png";
-          const newElement = document.createElement("img");
-          newElement.style.width = "150px";
-          newElement.style.position = "absolute";
-          newElement.style.transform = `translate(0px, ${transformX}px)`;
-          newElement.style.transition = "all 0.1s linear";
-          newElement.src = img;
-          return newElement;
+        let img;
+        if (outcome === 0) img = "./segitiga.png";
+        if (outcome === 1) img = "./kotak.png";
+        if (outcome === 2) img = "./bunder.png";
+        const newElement = document.createElement("img");
+        newElement.style.width = "150px";
+        newElement.style.position = "absolute";
+        newElement.style.transform = `translate(0px, ${transformX}px)`;
+        newElement.style.transition = "all 0.1s linear";
+        newElement.src = img;
+        return newElement;
       }
 
       /**
@@ -64,22 +71,24 @@
             const childs = [...col.children];
 
             const newElement = createNewElement(-1 * SQUARE_LENGTH);
-            col.appendChild(newElement)
-            setTimeout(() => {
-              setTimeout(() => {
+            col.appendChild(newElement);
+            requestAnimationFrame(() => {
+              requestAnimationFrame(() => {
                 newElement.style.transform = "translate(0px, 0px)";
-              }, 0);
-            }, 0);
+              });
+            });
 
             childs.forEach((child) => {
-              const translate = child.style.transform
+              const oldTranslate = child.style.transform
                 .replace("translate(0px, ", "")
                 .replace("px)", "");
-              const newTranslate =
-                (+translate + SQUARE_LENGTH) % (SQUARE_LENGTH * 3);
+              const newTranslate = +oldTranslate + SQUARE_LENGTH;
+
               child.style.transform = `translate(0px, ${newTranslate}px)`;
-              if (newTranslate < translate) {
-                child.remove();
+              if (newTranslate > (SQUARE_LENGTH * 3)) {
+                setTimeout(() => {
+                  child.remove();
+                }, 1000);
               }
             });
           }, 200 * i);
