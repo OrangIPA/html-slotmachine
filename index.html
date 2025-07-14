@@ -10,13 +10,17 @@
         place-items: center;
       "
     >
-      <div style="display: flex; background-color: pink; overflow: hidden">
-        <div style="display: flex" id="grid-container">
+      <div style="display: flex; align-items: center">
+        <div
+          style="display: flex; background-color: pink; overflow: hidden"
+          id="grid-container"
+        >
           <div id="leftrow"></div>
           <div id="midrow"></div>
           <div id="rightrow"></div>
         </div>
-        <button id="tombol-roll">klik</button>
+        <!-- <button id="tombol-roll">klik</button> -->
+        <div id="lever" style="overflow: show"></div>
       </div>
     </div>
     <script>
@@ -61,11 +65,50 @@
         }
       });
 
+      const leverImage = document.createElement("img");
+      leverImage.src = "./lever_up.png";
+      leverImage.style.width = "12rem";
+      leverImage.transition = "all 0.1 ease-in-out";
+      leverImage.style.transform = "rotate(50deg)";
+      leverImage.style.cursor = 'pointer'
+
+      const leverDiv = document.getElementById("lever");
+      leverDiv.appendChild(leverImage);
+
       /**
        * TOMBOL
        */
-      const tombolRoll = document.getElementById("tombol-roll");
-      tombolRoll.addEventListener("click", (e) => {
+
+      /**
+       * @type {"none" | "hover" | "rolling"}
+       */
+      let state = "none";
+      leverImage.addEventListener("mouseenter", () => {
+        if (state === "rolling") return;
+        state = "hover";
+        leverImage.style.transition = "all 0.1s ease-in-out";
+        leverImage.style.transform = "rotate(0deg)";
+      });
+
+      leverImage.addEventListener("mouseleave", () => {
+        if (state === "rolling") return;
+        state = "none";
+        leverImage.style.transition = "all 0.1s ease-in-out";
+        leverImage.style.transform = "rotate(50deg)";
+      });
+
+      leverImage.addEventListener("click", (e) => {
+        if (state === 'rolling') return;
+        setTimeout(() => {
+          state = 'none'
+          leverImage.style.transition = "all 1s ease-in-out";
+          leverImage.style.transform = "rotate(50deg)";
+        }, 3700);
+
+        state = "rolling";
+        leverImage.style.transition = 'all 0.7s ease-in-out';
+        leverImage.style.transform = 'rotate(120deg)'; 
+
         cols.forEach((col, i) => {
           let iteration = 0;
           const intervalHandle = setInterval(() => {
@@ -96,7 +139,7 @@
             }, 200 * i);
 
             iteration += 1;
-            if (iteration > 12 + (i * 8)) {
+            if (iteration > 12 + i * 8) {
               clearInterval(intervalHandle);
             }
           }, 98);
